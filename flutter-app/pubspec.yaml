@@ -1,0 +1,52 @@
+name: agent_report
+description: 온디바이스 AI 업무 보고서 자동화 앱
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # 상태 관리
+  flutter_riverpod: ^2.5.0
+  riverpod_annotation: ^2.3.0
+
+  # 로컬 DB (SQLite)
+  drift: ^2.18.0
+  sqlite3_flutter_libs: ^0.5.0
+
+  # HTTP
+  dio: ^5.4.0
+
+  # 인증 (OIDC)
+  flutter_appauth: ^6.0.0
+  flutter_secure_storage: ^9.0.0
+
+  # 음성 입력 (STT)
+  speech_to_text: ^6.6.0
+
+  # 플랫폼 감지
+  universal_platform: ^1.1.0
+
+  # 유틸
+  intl: ^0.19.0
+  json_annotation: ^4.9.0
+  path_provider: ^2.1.0
+  connectivity_plus: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  drift_dev: ^2.18.0
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.0
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/

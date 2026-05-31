@@ -1,0 +1,30 @@
+# 환경 변수 / 비밀번호 (.env.example 은 예외로 커밋)
+.env
+.env.local
+.env.production
+secrets/
+*.secret
+
+# Flutter
+flutter-app/.dart_tool/
+flutter-app/.flutter-plugins
+flutter-app/.flutter-plugins-dependencies
+flutter-app/build/
+flutter-app/.packages
+flutter-app/pubspec.lock
+flutter-app/**/*.g.dart
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.iml
