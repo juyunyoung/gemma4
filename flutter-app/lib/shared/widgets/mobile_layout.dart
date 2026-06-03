@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../features/auth/auth_provider.dart';
 import '../../features/report_create/report_create_screen.dart';
 import '../../features/report_view/report_view_screen.dart';
 import '../../features/search/search_screen.dart';
+import '../../features/settings/llm_settings_screen.dart';
 
 class MobileLayout extends ConsumerStatefulWidget {
   const MobileLayout({super.key});
@@ -20,12 +20,11 @@ class _MobileLayoutState extends ConsumerState<MobileLayout> {
     ReportCreateScreen(),
     ReportViewScreen(),
     SearchScreen(),
+    LlmSettingsScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authProvider).value;
-
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
@@ -46,6 +45,11 @@ class _MobileLayoutState extends ConsumerState<MobileLayout> {
             icon: Icon(Icons.search),
             selectedIcon: Icon(Icons.search),
             label: '검색',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(Icons.settings),
+            label: 'AI 설정',
           ),
         ],
       ),

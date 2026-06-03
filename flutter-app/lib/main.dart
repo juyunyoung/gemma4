@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'core/database/app_database.dart';
 import 'features/auth/auth_screen.dart';
 import 'features/auth/auth_provider.dart';
 import 'shared/widgets/desktop_layout.dart';

@@ -37,6 +37,9 @@ dependencies:
   path_provider: ^2.1.0
   connectivity_plus: ^6.0.0
 
+  # 온디바이스 AI
+  flutter_gemma: ^0.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,6 +48,9 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   build_runner: ^2.4.0
   json_serializable: ^6.8.0
+
+dependency_overrides:
+  js: ^0.7.1
 
 flutter:
   uses-material-design: true

@@ -30,7 +30,7 @@ class AppDatabase extends _$AppDatabase {
       into(localReports).insertOnConflictUpdate(entry);
 
   // SyncQueue DAOs
-  Future<List<SyncQueueEntry>> getPendingSync() =>
+  Future<List<SyncQueueData>> getPendingSync() =>
       (select(syncQueue)..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
           .get();
 

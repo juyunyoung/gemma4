@@ -6,6 +6,7 @@ import '../../features/report_view/report_view_screen.dart';
 import '../../features/report_manage/report_manage_screen.dart';
 import '../../features/search/search_screen.dart';
 import '../../features/admin/admin_screen.dart';
+import '../../features/settings/llm_settings_screen.dart';
 
 class DesktopLayout extends ConsumerStatefulWidget {
   const DesktopLayout({super.key});
@@ -46,6 +47,11 @@ class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
           selectedIcon: Icon(Icons.admin_panel_settings),
           label: Text('관리'),
         ),
+      const NavigationRailDestination(
+        icon: Icon(Icons.settings_outlined),
+        selectedIcon: Icon(Icons.settings),
+        label: Text('AI 설정'),
+      ),
     ];
 
     final screens = [
@@ -53,6 +59,7 @@ class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
       if (isApprover) const ReportManageScreen(),
       const SearchScreen(),
       if (isAdmin) const AdminScreen(),
+      const LlmSettingsScreen(),
     ];
 
     return Scaffold(

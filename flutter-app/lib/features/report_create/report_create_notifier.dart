@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../core/audio/stt_service.dart';
 import '../../core/database/app_database.dart';
-import '../../core/database/tables/reports_table.dart';
 import '../../core/network/api_client.dart';
+import '../../core/network/on_device_llm_service.dart';
+import '../../features/settings/llm_settings_provider.dart';
 import '../../core/sync/sync_service.dart';
 
 part 'report_create_notifier.g.dart';
@@ -86,8 +87,28 @@ class ReportCreateNotifier extends _$ReportCreateNotifier {
 
   Future<void> _classifyWithGemma(String rawText) async {
     try {
+      final onDeviceService = ref.read(onDeviceLlmServiceProvider);
+      final isDownloaded = await onDeviceService.isModelDownloaded();
+
+      if (!isDownloaded) {
+        state = state.copyWith(
+          classifiedItems: {
+            for (final t in _defaultTemplates) t: '',
+            'unmatched': rawText,
+          },
+          isClassifying: false,
+          error: '온디바이스 AI 모델이 설치되지 않았습니다. AI 설정 화면에서 먼저 다운로드해 주세요.',
+        );
+        return;
+      }
+
+      final settings = ref.read(llmSettingsProvider);
+      final systemPrompt = settings.systemPrompt.isNotEmpty
+          ? '${settings.systemPrompt}\n\n'
+          : '';
+
       final prompt = '''
-활성 템플릿: ${jsonEncode(_defaultTemplates)}
+${systemPrompt}활성 템플릿: ${jsonEncode(_defaultTemplates)}
 음성 원문: "$rawText"
 
 각 템플릿 항목에 해당하는 내용을 분류하고,
@@ -96,8 +117,8 @@ class ReportCreateNotifier extends _$ReportCreateNotifier {
 예시: {"인부출역현황": "오늘 12명 출역", "재고현황": "", ..., "unmatched": ""}
 ''';
 
-      final response =
-          await ref.read(apiClientProvider).generateWithGemma(prompt);
+      // 온디바이스 모델을 이용한 로컬 추론 실행
+      final response = await onDeviceService.generate(prompt);
 
       // JSON 파싱 (Gemma가 ```json ... ``` 래핑 포함할 수 있음)
       final jsonStr = _extractJson(response);
@@ -106,6 +127,7 @@ class ReportCreateNotifier extends _$ReportCreateNotifier {
         classifiedItems:
             classified.map((k, v) => MapEntry(k, v.toString())),
         isClassifying: false,
+        error: null,
       );
     } catch (e) {
       // Gemma 오류 시 수동 입력으로 폴백
@@ -115,7 +137,7 @@ class ReportCreateNotifier extends _$ReportCreateNotifier {
           'unmatched': rawText,
         },
         isClassifying: false,
-        error: 'AI 분류 실패 — 직접 입력해 주세요.',
+        error: '온디바이스 AI 분류 실패 ($e) — 직접 입력해 주세요.',
       );
     }
   }
@@ -192,7 +214,3 @@ class ReportCreateNotifier extends _$ReportCreateNotifier {
     }
   }
 }
-
-final reportCreateNotifierProvider =
-    NotifierProvider<ReportCreateNotifier, ReportCreateState>(
-        ReportCreateNotifier.new);

@@ -3,7 +3,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../database/app_database.dart';
-import '../database/tables/sync_queue_table.dart';
 import '../network/api_client.dart';
 
 class SyncService {
